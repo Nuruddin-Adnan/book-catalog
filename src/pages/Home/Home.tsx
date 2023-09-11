@@ -1,7 +1,6 @@
 import Hero from "../../components/Hero";
 import Subscribe from "../../components/Subscribe";
 import BookCard from "../../components/BookCard";
-import Footer from "../../components/Footer";
 
 export default function Home() {
   return (
@@ -17,7 +16,7 @@ export default function Home() {
               Get all the latest Book here.
             </p>
           </div>
-          <div className="grid gap-8 grid-cols-5 lg:px-10 px-4">
+          <div className="grid gap-8 xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 lg:px-10 px-4">
             <BookCard />
             <BookCard />
             <BookCard />
@@ -56,7 +55,6 @@ export default function Home() {
       <div className="mb-6">
         <Subscribe />
       </div>
-      <Footer />
     </>
   );
 }

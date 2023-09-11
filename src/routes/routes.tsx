@@ -1,13 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/Home/Home";
-import BlankPage from "../pages/BlankPage/BlankPage";
 import PrivateRoute from "./PrivateRoute";
-import PrivatePage from "../pages/PrivatePage/PrivatePage";
 import DynamicPage from "../pages/DynamicPage/DynamicPage";
 import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import NotFound from "../pages/NotFound/NotFound";
+import AddNewBook from "../pages/AddNewBook/AddNewBook";
 
 const routes = createBrowserRouter([
   {
@@ -19,14 +18,10 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/blank-page",
-        element: <BlankPage />,
-      },
-      {
-        path: "/private-page",
+        path: "/add-book",
         element: (
           <PrivateRoute>
-            <PrivatePage />
+            <AddNewBook />
           </PrivateRoute>
         ),
       },
