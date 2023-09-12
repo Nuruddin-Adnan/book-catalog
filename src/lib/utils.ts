@@ -1,13 +1,13 @@
-type IReview = [
-  {
-    reviewedBy: string;
-    message: string;
-    ratings: number;
-    reviewdate: Date;
-  }
-];
+import { IUser } from "../types/book";
 
-export function calculateRatings(items: IReview) {
+export type IReview = {
+  reviewedBy: string | IUser;
+  message: string;
+  ratings: number;
+  reviewdate: Date;
+};
+
+export function calculateRatings(items: IReview[]) {
   let total = 0;
 
   if (!(items.length > 0)) {

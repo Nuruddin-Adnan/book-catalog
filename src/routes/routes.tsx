@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../pages/Home/Home";
 import PrivateRoute from "./PrivateRoute";
-import DynamicPage from "../pages/DynamicPage/DynamicPage";
 import Login from "../pages/Login/Login";
 import Signup from "../pages/Signup/Signup";
 import NotFound from "../pages/NotFound/NotFound";
 import AddNewBook from "../pages/AddNewBook/AddNewBook";
+import BookDetails from "../pages/BookDetails/BookDetails";
 
 const routes = createBrowserRouter([
   {
@@ -26,12 +26,8 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path: `/dynamic-page/:id`,
-        element: (
-          <PrivateRoute>
-            <DynamicPage />
-          </PrivateRoute>
-        ),
+        path: `/book-details/:id`,
+        element: <BookDetails />,
       },
     ],
   },

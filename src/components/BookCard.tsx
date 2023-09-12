@@ -4,6 +4,7 @@ import { BsHeart, BsBook } from "react-icons/bs";
 import { IBook } from "../types/book";
 import { calculateRatings } from "../lib/utils";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 interface BookCardProps {
   book: IBook;
@@ -12,10 +13,15 @@ interface BookCardProps {
 const BookCard: React.FC<BookCardProps> = ({ book }) => {
   const { _id, title, author, genre, publicationDate, imgURL, reviews } = book;
 
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState<number>(0); // Initialize as a string
+
   useEffect(() => {
-    setRating(() => parseFloat(calculateRatings(reviews!)));
+    if (reviews) {
+      const calculatedRating = calculateRatings(reviews);
+      setRating(calculatedRating as number);
+    }
   }, [reviews]);
+
   return (
     <>
       <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform group/item">
@@ -54,7 +60,10 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           <div className="text-xs text-gray-500 uppercase">{genre}</div>
           <div className="font-semibold text-md mb-2">{title}</div>
           <div className="text-sm text-gray-700">
-            By: {author.name.firstName + " " + author.name.lastName}
+            By:
+            {typeof author === "object"
+              ? author.name?.firstName + " " + author.name?.lastName
+              : author}
           </div>
           <div className="text-sm text-gray-600">
             {format(new Date(publicationDate), "MMM dd, yyyy")}
@@ -65,12 +74,12 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
           <p className="pt-1 pl-2">({rating}/5)</p>
         </div>
         <div className="px-6 pt-4 pb-2 mb-6">
-          <a
-            href="#"
+          <Link
+            to={`/book-details/${_id}`}
             className="border border-blue-500 hover:bg-blue-700 text-blue-500 hover:text-white transition-all text-center font-bold py-2 px-4 w-full block rounded-full"
           >
             Read More
-          </a>
+          </Link>
         </div>
       </div>
     </>

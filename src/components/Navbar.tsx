@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import { MdOutlineLogout } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { logout } from "../redux/features/auth/authSlice";
+import { BsBook, BsHeart } from "react-icons/bs";
 
 type User = {
   _id: string;
@@ -25,13 +26,13 @@ const Navbar = () => {
   return (
     <header className="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-3 sm:py-0 dark:bg-gray-800 dark:border-gray-700">
       <nav
-        className="relative container px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+        className="relative navbar container px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
         aria-label="Global"
       >
         <div className="flex items-center justify-between">
           <NavLink
             className="flex-none text-2xl font-bold text-blue-600 dark:text-white"
-            to="#"
+            to="/"
             aria-label="Brand"
           >
             Bookcat
@@ -74,7 +75,7 @@ const Navbar = () => {
         >
           <div className="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:pl-7">
             <NavLink
-              className="font-medium text-blue-600 sm:py-6 dark:text-blue-500"
+              className="nav-link font-medium active:text-blue-500 text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500"
               to="/"
               aria-current="page"
             >
@@ -82,10 +83,38 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
-              className="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500"
+              className="nav-link font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500"
+              to="/all-books"
+            >
+              All Books
+            </NavLink>
+            <NavLink
+              className="nav-link font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500"
               to="/add-book"
             >
               Add new book
+            </NavLink>
+            <NavLink
+              className="font-medium text-gray-500 hover:text-gray-400 sm:py-4 dark:text-gray-400 dark:hover:text-gray-500"
+              to="#"
+            >
+              <div className="relative border w-8 h-8 rounded-full grid place-items-center">
+                <BsHeart />
+                <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
+                  {12}
+                </span>
+              </div>
+            </NavLink>
+            <NavLink
+              className="font-medium text-gray-500 hover:text-gray-400 sm:py-4 dark:text-gray-400 dark:hover:text-gray-500"
+              to="#"
+            >
+              <div className="relative border w-8 h-8 rounded-full grid place-items-center">
+                <BsBook />
+                <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
+                  {7}
+                </span>
+              </div>
             </NavLink>
             <NavLink
               className="font-medium text-gray-500 hover:text-gray-400 sm:py-6 dark:text-gray-400 dark:hover:text-gray-500"
@@ -124,7 +153,7 @@ const Navbar = () => {
                 >
                   <img
                     className="inline-block h-[2.375rem] w-[2.375rem] rounded-full"
-                    src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
                     alt="Image Description"
                   />
                 </button>
