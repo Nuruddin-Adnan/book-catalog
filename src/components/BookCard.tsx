@@ -1,18 +1,27 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import { BsHeart, BsBook } from "react-icons/bs";
+import { IBook } from "../types/book";
+import { calculateRatings } from "../lib/utils";
+import { format } from "date-fns";
 
-export default function BookCard() {
+interface BookCardProps {
+  book: IBook;
+}
+
+const BookCard: React.FC<BookCardProps> = ({ book }) => {
+  const { _id, title, author, genre, publicationDate, imgURL, reviews } = book;
+
   const [rating, setRating] = useState(0);
   useEffect(() => {
-    setRating(() => 0);
-  }, []);
+    setRating(() => parseFloat(calculateRatings(reviews!)));
+  }, [reviews]);
   return (
     <>
       <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform group/item">
         <div className="overflow-hidden relative">
           <img
-            src="http://exprostudio.com/html/book_library/images/books/img-04.jpg"
+            src={imgURL}
             alt="Blog"
             className="w-full object-cover transition-all group-hover:scale-105"
           />
@@ -42,13 +51,18 @@ export default function BookCard() {
           </div>
         </div>
         <div className="px-6 py-2">
-          <div className="text-xs text-gray-500">Sports</div>
-          <div className="font-semibold text-md mb-2">Very good image</div>
-          <div className="text-sm text-gray-700">By: Adnan</div>
-          <div className="text-sm text-gray-600">10 september 2023</div>
+          <div className="text-xs text-gray-500 uppercase">{genre}</div>
+          <div className="font-semibold text-md mb-2">{title}</div>
+          <div className="text-sm text-gray-700">
+            By: {author.name.firstName + " " + author.name.lastName}
+          </div>
+          <div className="text-sm text-gray-600">
+            {format(new Date(publicationDate), "MMM dd, yyyy")}
+          </div>
         </div>
-        <div className="star-rating px-6">
+        <div className="star-rating px-6 flex items-center">
           <Rating initialValue={rating} readonly size={20} />
+          <p className="pt-1 pl-2">({rating}/5)</p>
         </div>
         <div className="px-6 pt-4 pb-2 mb-6">
           <a
@@ -61,4 +75,6 @@ export default function BookCard() {
       </div>
     </>
   );
-}
+};
+
+export default BookCard;

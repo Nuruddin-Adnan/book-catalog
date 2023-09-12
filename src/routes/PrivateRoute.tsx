@@ -8,11 +8,10 @@ interface IProps {
 
 export default function PrivateRoute({ children }: IProps) {
   const { user } = useAppSelector((state) => state.auth);
-
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   if (!user) {
-    return <Navigate to="/login" state={{ path: pathname }} />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;

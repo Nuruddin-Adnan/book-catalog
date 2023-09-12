@@ -1,6 +1,6 @@
 // import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hook";
 import { setAccessToken, setUser } from "../../redux/features/auth/authSlice";
@@ -14,6 +14,8 @@ type Inputs = {
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   // ! set the user info to redux storage. The setAuth function need to call into login handler
   const [loginMutation] = useLoginMutation();
@@ -51,7 +53,9 @@ export default function Login() {
       const accessToken = data.accessToken;
       setAuth(accessToken);
       reset();
-      navigate("/");
+      if (accessToken) {
+        navigate(from, { replace: true });
+      }
     }
   };
 

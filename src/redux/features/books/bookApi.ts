@@ -2,40 +2,18 @@ import { api } from "../../api/apiSlice";
 
 const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getMyBooks: builder.query({
-      query: () => `/books/my-books`,
-      providesTags: ["books"],
-    }),
-    getShowToAllbooks: builder.query({
-      query: () => `/books/show-to-all`,
-      providesTags: ["books"],
-    }),
-    getSinglebook: builder.query({
-      query: (id) => `/books/${id}`,
-      providesTags: ["books"],
-    }),
-    createbook: builder.mutation({
+    createBook: builder.mutation({
       query: (data) => ({
-        url: "/books/create-book",
+        url: "/books",
         method: "POST",
         body: data,
       }),
     }),
-    updatebook: builder.mutation({
-      query: ({ id, data }) => ({
-        url: `/books/${id}`,
-        method: "PATCH",
-        body: data,
-      }),
-      invalidatesTags: ["books"],
+    getBooks: builder.query({
+      query: (query) => `/books?${query}`,
+      providesTags: ["books"],
     }),
   }),
 });
 
-export const {
-  useGetMyBooksQuery,
-  useGetSinglebookQuery,
-  useCreatebookMutation,
-  useGetShowToAllbooksQuery,
-  useUpdatebookMutation,
-} = bookApi;
+export const { useCreateBookMutation, useGetBooksQuery } = bookApi;

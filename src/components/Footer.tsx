@@ -249,8 +249,8 @@ export default function Footer() {
                     id="flag-icon-css-us"
                     viewBox="0 0 512 512"
                   >
-                    <g fill-rule="evenodd">
-                      <g stroke-width="1pt">
+                    <g fillRule="evenodd">
+                      <g strokeWidth="1pt">
                         <path
                           fill="#bd3d44"
                           d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
@@ -286,8 +286,8 @@ export default function Footer() {
                     <path
                       d="M2 11L8.16086 5.31305C8.35239 5.13625 8.64761 5.13625 8.83914 5.31305L15 11"
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
                     />
                   </svg>
                 </button>
@@ -306,8 +306,8 @@ export default function Footer() {
                       id="flag-icon-css-us"
                       viewBox="0 0 512 512"
                     >
-                      <g fill-rule="evenodd">
-                        <g stroke-width="1pt">
+                      <g fillRule="evenodd">
+                        <g strokeWidth="1pt">
                           <path
                             fill="#bd3d44"
                             d="M0 0h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0zm0 20h247v10H0z"
@@ -375,7 +375,7 @@ export default function Footer() {
                       id="flag-icon-css-it"
                       viewBox="0 0 512 512"
                     >
-                      <g fill-rule="evenodd" stroke-width="1pt">
+                      <g fillRule="evenodd" strokeWidth="1pt">
                         <path fill="#fff" d="M0 0h512v512H0z" />
                         <path fill="#009246" d="M0 0h170.7v512H0z" />
                         <path fill="#ce2b37" d="M341.3 0H512v512H341.3z" />

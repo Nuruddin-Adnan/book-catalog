@@ -1,8 +1,24 @@
 import Hero from "../../components/Hero";
 import Subscribe from "../../components/Subscribe";
 import BookCard from "../../components/BookCard";
+import { useGetBooksQuery } from "../../redux/features/books/bookApi";
+import { IBook } from "../../types/book";
 
 export default function Home() {
+  const { data, isLoading, error } = useGetBooksQuery(
+    "sort=-createdAt&limit=10",
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error:</div>;
+  }
   return (
     <>
       <Hero />
@@ -17,16 +33,10 @@ export default function Home() {
             </p>
           </div>
           <div className="grid gap-8 xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 lg:px-10 px-4">
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
-            <BookCard />
+            {data.data &&
+              data.data.map((book: IBook) => (
+                <BookCard book={book} key={book._id} />
+              ))}
           </div>
           <div className="text-center mt-10">
             <a
@@ -44,8 +54,8 @@ export default function Home() {
                 <path
                   d="M5.27921 2L10.9257 7.64645C11.1209 7.84171 11.1209 8.15829 10.9257 8.35355L5.27921 14"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 ></path>
               </svg>
             </a>
