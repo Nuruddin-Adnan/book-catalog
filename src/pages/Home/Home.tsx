@@ -16,6 +16,9 @@ export default function Home() {
   if (error) {
     return <div>Error:</div>;
   }
+
+  console.log(data);
+
   return (
     <>
       <Hero />

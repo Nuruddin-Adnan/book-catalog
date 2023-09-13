@@ -40,7 +40,6 @@ export default function BookDetails() {
       return errorToast("Please provide your rating");
     }
     data.ratings = rating;
-    console.log(data);
 
     const response = await addBookReview({ id, data });
 
@@ -74,7 +73,11 @@ export default function BookDetails() {
             <div className="relative pt-[50%] sm:pt-[100%] rounded-lg">
               <img
                 className="w-full h-full absolute top-0 left-0 object-cover rounded-lg"
-                src={data.data?.imgURL}
+                src={
+                  data.data?.imgURL !== ""
+                    ? data.data?.imgURL
+                    : "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
+                }
                 alt="Image Description"
               />
             </div>

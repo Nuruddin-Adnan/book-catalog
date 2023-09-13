@@ -113,7 +113,11 @@ export default function MyWishlist() {
                               <div className="flex items-center gap-x-4">
                                 <img
                                   className="flex-shrink-0 h-[2.375rem] w-[2.375rem] rounded-md"
-                                  src={wishlist.book?.imgURL}
+                                  src={
+                                    wishlist.book?.imgURL !== ""
+                                      ? wishlist.book?.imgURL
+                                      : "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
+                                  }
                                   alt="Image Description"
                                 />
                                 <div>
@@ -126,7 +130,7 @@ export default function MyWishlist() {
                           </td>
                           <td className="h-px w-72 min-w-[18rem]">
                             <div className="h-full p-6">
-                              <div className="star-rating">
+                              <div className="star-rating flex items-center">
                                 <Rating
                                   initialValue={
                                     calculateRatings(
@@ -136,6 +140,10 @@ export default function MyWishlist() {
                                   readonly
                                   size={20}
                                 />
+                                <div className="pt-1 pl-2">
+                                  {calculateRatings(wishlist.book?.reviews)} out
+                                  of 5
+                                </div>
                               </div>
                             </div>
                           </td>

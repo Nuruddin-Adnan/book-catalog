@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { useAddToWishlistMutation } from "../redux/features/wishlist/wishlistApi";
 import { errorToast, successToast } from "../hooks/useToast";
+import { useCreateMyReadinglistMutation } from "../redux/features/myReadingList/myReadingList";
 
 interface BookCardProps {
   book: IBook;
@@ -17,6 +18,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
 
   const [rating, setRating] = useState<number>(0); // Initialize as a string
   const [addToWishlist] = useAddToWishlistMutation();
+  const [createMyReadinglist] = useCreateMyReadinglistMutation();
 
   useEffect(() => {
     if (reviews) {
@@ -25,6 +27,7 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
     }
   }, [reviews]);
 
+  // add to wishlist start
   const addToWishlistHandler = async (bookId: string) => {
     const response = await addToWishlist({ book: bookId });
     if ("error" in response) {
@@ -36,13 +39,35 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
       successToast(response.data.message);
     }
   };
+  // end of add to wishlist
+
+  // create my reading list start
+  const createMyReadinglistHandler = async (bookId: string, status: string) => {
+    const response = await createMyReadinglist({
+      book: bookId,
+      status: status,
+    });
+    if ("error" in response) {
+      if (response.error && "data" in response.error) {
+        const errorData = response.error.data as { message: string };
+        errorToast(errorData.message);
+      }
+    } else {
+      successToast(response.data.message);
+    }
+  };
+  // end of create my reading list
 
   return (
     <>
       <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform group/item">
         <div className="overflow-hidden relative">
           <img
-            src={imgURL}
+            src={
+              imgURL !== ""
+                ? imgURL
+                : "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png"
+            }
             alt="Blog"
             className="w-full object-cover transition-all group-hover:scale-105"
           />
@@ -62,7 +87,12 @@ const BookCard: React.FC<BookCardProps> = ({ book }) => {
               </button>
             </div>
             <div className="hs-tooltip block [--placement:left] group/my-reading-list">
-              <button className="rounded-full w-10 h-10 grid place-items-center bg-white hs-tooltip-toggle group-hover/my-reading-list:bg-blue-600 group-hover/my-reading-list:text-white transition-all">
+              <button
+                className="rounded-full w-10 h-10 grid place-items-center bg-white hs-tooltip-toggle group-hover/my-reading-list:bg-blue-600 group-hover/my-reading-list:text-white transition-all"
+                onClick={() =>
+                  createMyReadinglistHandler(_id as string, "plan to read")
+                }
+              >
                 <BsBook />
                 <span
                   className="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"

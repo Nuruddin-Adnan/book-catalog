@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { logout } from "../redux/features/auth/authSlice";
 import { BsBook, BsHeart } from "react-icons/bs";
 import { useMyWishlistQuery } from "../redux/features/wishlist/wishlistApi";
+import { useGetMyReadinglistsQuery } from "../redux/features/myReadingList/myReadingList";
 
 type User = {
   _id: string;
@@ -20,6 +21,9 @@ const Navbar = () => {
   const { user } = useAppSelector((state: { auth: AuthState }) => state.auth);
   const dispatch = useAppDispatch();
   const { data: wishlist } = useMyWishlistQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+  const { data: myReadingList } = useGetMyReadinglistsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -105,20 +109,24 @@ const Navbar = () => {
             >
               <div className="relative border w-8 h-8 rounded-full grid place-items-center">
                 <BsHeart />
-                <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
-                  {wishlist && wishlist.data.length}
-                </span>
+                {wishlist?.data.length > 0 && (
+                  <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
+                    {wishlist.data.length}
+                  </span>
+                )}
               </div>
             </NavLink>
             <NavLink
               className="font-medium text-gray-500 hover:text-gray-400 sm:py-4 dark:text-gray-400 dark:hover:text-gray-500"
-              to="#"
+              to="/my-reading-list"
             >
               <div className="relative border w-8 h-8 rounded-full grid place-items-center">
                 <BsBook />
-                <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
-                  {7}
-                </span>
+                {myReadingList?.data.length > 0 && (
+                  <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
+                    {myReadingList?.data.length}
+                  </span>
+                )}
               </div>
             </NavLink>
             <NavLink
