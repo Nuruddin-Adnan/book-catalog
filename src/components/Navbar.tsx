@@ -101,7 +101,7 @@ const Navbar = () => {
             </NavLink>
             <NavLink
               className="font-medium text-gray-500 hover:text-gray-400 sm:py-4 dark:text-gray-400 dark:hover:text-gray-500"
-              to="#"
+              to="/my-wishlist"
             >
               <div className="relative border w-8 h-8 rounded-full grid place-items-center">
                 <BsHeart />
