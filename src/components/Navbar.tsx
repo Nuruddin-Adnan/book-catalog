@@ -3,6 +3,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { logout } from "../redux/features/auth/authSlice";
 import { BsBook, BsHeart } from "react-icons/bs";
+import { useMyWishlistQuery } from "../redux/features/wishlist/wishlistApi";
 
 type User = {
   _id: string;
@@ -18,7 +19,11 @@ type AuthState = {
 const Navbar = () => {
   const { user } = useAppSelector((state: { auth: AuthState }) => state.auth);
   const dispatch = useAppDispatch();
+  const { data: wishlist } = useMyWishlistQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
 
+  // logout function
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -101,7 +106,7 @@ const Navbar = () => {
               <div className="relative border w-8 h-8 rounded-full grid place-items-center">
                 <BsHeart />
                 <span className="absolute top-[-8px] right-[-8px] bg-red-500 text-white rounded-full w-5 h-5 text-center text-[10px]">
-                  {12}
+                  {wishlist && wishlist.data.length}
                 </span>
               </div>
             </NavLink>
