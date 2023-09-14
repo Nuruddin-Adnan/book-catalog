@@ -8,12 +8,13 @@ const genreApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["genres"],
     }),
-    getGenres: builder.query({
+    getAllGenres: builder.query({
       query: (query) => `/genres?${query}`,
-      providesTags: ["books"],
+      providesTags: ["genres"],
     }),
   }),
 });
 
-export const { useCreateGenreMutation, useGetGenresQuery } = genreApi;
+export const { useCreateGenreMutation, useGetAllGenresQuery } = genreApi;

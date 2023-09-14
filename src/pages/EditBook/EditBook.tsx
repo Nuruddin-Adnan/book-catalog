@@ -2,13 +2,16 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import Subscribe from "../../components/Subscribe";
 import { IBook } from "../../types/book";
-import { useAppSelector } from "../../redux/hook";
-import { AuthState } from "../../types/auth";
-import { useCreateBookMutation } from "../../redux/features/books/bookApi";
+import {
+  useEditBokMutation,
+  useGetSingleBookQuery,
+} from "../../redux/features/books/bookApi";
 import { errorToast, successToast } from "../../hooks/useToast";
 import { useGetAllGenresQuery } from "../../redux/features/genre/genreApi";
+import { useNavigate, useParams } from "react-router-dom";
+import { format } from "date-fns";
 
-export default function AddNewBook() {
+export default function EditBook() {
   const {
     register,
     handleSubmit,
@@ -16,26 +19,38 @@ export default function AddNewBook() {
     formState: { errors },
   } = useForm<IBook>();
 
-  const { user } = useAppSelector((state: { auth: AuthState }) => state.auth);
-  const [createbook] = useCreateBookMutation();
+  const navigate = useNavigate();
+
+  const { id } = useParams(); //Book id from router paramss
+
+  const [editBok] = useEditBokMutation();
   const { data, isLoading, error } = useGetAllGenresQuery("", {
     refetchOnMountOrArgChange: true,
   });
+  const {
+    data: bookData,
+    isLoading: bookLoading,
+    error: bookError,
+  } = useGetSingleBookQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  if (isLoading) {
+  if (isLoading || bookLoading) {
     return <div>Loading:</div>;
   }
 
-  if (error) {
+  if (error || bookError) {
     return <div>Error:</div>;
   }
 
   const genres = data.data;
+  const book = bookData.data;
 
   const onSubmit: SubmitHandler<Partial<IBook>> = async (data: any) => {
     data.publicationDate = new Date(data.publicationDate);
-    data.author = user!._id;
-    const response = await createbook(data);
+
+    console.log(id, data);
+    const response = await editBok({ id, data });
 
     if ("error" in response) {
       if (response.error && "data" in response.error) {
@@ -45,6 +60,7 @@ export default function AddNewBook() {
     } else {
       successToast(response.data.message);
       reset();
+      navigate("/my-books");
     }
   };
   return (
@@ -54,7 +70,7 @@ export default function AddNewBook() {
           <div className="relative">
             <div className="flex flex-col border rounded-xl p-4 sm:p-6 lg:p-10 dark:border-gray-700">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                Add a new book
+                Edit {book?.title}
               </h2>
 
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -66,6 +82,7 @@ export default function AddNewBook() {
                     <input
                       type="text"
                       className="py-3 px-4 block w-full border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      defaultValue={book?.title}
                       {...register("title", {
                         required: "Name is required",
                         minLength: 3,
@@ -85,6 +102,7 @@ export default function AddNewBook() {
                       </label>
                       <select
                         className="py-3 px-4 pr-9 block w-full border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                        defaultValue={book?.genre}
                         {...register("genre", {
                           required: "Genre is required",
                         })}
@@ -112,6 +130,10 @@ export default function AddNewBook() {
                       <input
                         type="date"
                         className="py-3 px-4 block w-full border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                        defaultValue={`${format(
+                          new Date(book?.publicationDate),
+                          "YYY-MM-dd"
+                        )}`}
                         {...register("publicationDate", {
                           required: "Publication date is required",
                         })}
@@ -131,6 +153,7 @@ export default function AddNewBook() {
                     <input
                       type="text"
                       className="py-3 px-4 block w-full border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      defaultValue={book?.imgURL}
                       {...register("imgURL")}
                     />
                   </div>
@@ -142,6 +165,7 @@ export default function AddNewBook() {
                     <textarea
                       rows={4}
                       className="py-3 px-4 block w-full border border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
+                      defaultValue={book?.description}
                       {...register("description", {
                         required: "Description is required",
                       })}
@@ -159,7 +183,7 @@ export default function AddNewBook() {
                     type="submit"
                     className="inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-sm lg:text-base text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800"
                   >
-                    Add Book
+                    Save change
                   </button>
                 </div>
               </form>

@@ -9,6 +9,9 @@ import AddNewBook from "../pages/AddNewBook/AddNewBook";
 import BookDetails from "../pages/BookDetails/BookDetails";
 import MyWishlist from "../pages/MyWishlist/MyWishlist";
 import MyReadingList from "../pages/MyReadingList/MyReadingList";
+import MyBooks from "../pages/MyBooks/MyBooks";
+import EditBook from "../pages/EditBook/EditBook";
+import AllBooks from "../pages/AllBooks/AllBooks";
 
 const routes = createBrowserRouter([
   {
@@ -44,8 +47,28 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: "/my-books",
+        element: (
+          <PrivateRoute>
+            <MyBooks />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: `/edit-book/:id`,
+        element: (
+          <PrivateRoute>
+            <EditBook />
+          </PrivateRoute>
+        ),
+      },
+      {
         path: `/book-details/:id`,
         element: <BookDetails />,
+      },
+      {
+        path: `/all-books`,
+        element: <AllBooks />,
       },
     ],
   },

@@ -17,8 +17,6 @@ export default function Home() {
     return <div>Error:</div>;
   }
 
-  console.log(data);
-
   return (
     <>
       <Hero />
@@ -43,7 +41,7 @@ export default function Home() {
               <div className="text-center mt-10">
                 <Link
                   className="inline-flex justify-center items-center gap-x-3 text-center bg-blue-600 hover:bg-blue-700 border border-transparent text-sm lg:text-base text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition py-3 px-4 dark:focus:ring-offset-gray-800"
-                  to="#"
+                  to="/all-books"
                 >
                   Get All Books
                   <svg

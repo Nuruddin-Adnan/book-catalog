@@ -14,6 +14,6 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["wishlists", "books", "my-reading-lists"],
+  tagTypes: ["wishlists", "books", "my-reading-lists", "genres"],
   endpoints: () => ({}),
 });
