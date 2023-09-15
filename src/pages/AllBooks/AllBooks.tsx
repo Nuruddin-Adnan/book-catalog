@@ -6,9 +6,18 @@ import { useState } from "react";
 
 export default function AllBooks() {
   const [filter, setFilter] = useState("");
-  const { data, isLoading, error } = useGetBooksQuery(filter, {
+  const [searchInput, setSearchInput] = useState("");
+  const [query, setQuery] = useState("");
+
+  const { data, isLoading, error } = useGetBooksQuery(query, {
     refetchOnMountOrArgChange: true,
   });
+
+  // filtering start
+  const filterQuery = () => {
+    console.log(filter, searchInput);
+  };
+  // end of filtering
 
   if (error) {
     return <div>Error:</div>;
@@ -17,12 +26,13 @@ export default function AllBooks() {
   return (
     <div>
       <div className="container my-10">
-        <div className="relative flex rounded-md border shadow-sm">
+        <div className="relative flex rounded-md border shadow-sm max-w-3xl m-auto">
           <input
             type="text"
             id="hs-trailing-button-add-on-multiple-add-ons"
             name="hs-trailing-button-add-on-multiple-add-ons"
             className="py-4 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm  focus:border-blue-500 focus:z-10 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+            onChange={(e) => setSearchInput(e.target.value)}
           />
           <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
             <svg
@@ -37,15 +47,19 @@ export default function AllBooks() {
             </svg>
           </div>
           <div className="min-w-fit border">
-            <select className="block w-full h-full px-4 border-transparent rounded-md focus:ring-blue-600 focus:border-blue-600 dark:bg-gray-800 border font-medium bg-white text-gray-700 shadow-sm text-sm">
-              <option>USD</option>
-              <option>CAD</option>
-              <option>EUR</option>
+            <select
+              className="block w-full h-full px-4 border-transparent rounded-md focus:ring-blue-600 focus:border-blue-600 dark:bg-gray-800 border font-medium bg-white text-gray-700 shadow-sm text-sm "
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="title">Title</option>
+              <option value="genre">Genre</option>
+              <option value="publicationYear">Publication year</option>
             </select>
           </div>
           <button
             type="button"
             className="py-4 px-4 inline-flex flex-shrink-0 justify-center items-center gap-2 rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
+            onClick={filterQuery}
           >
             Search
           </button>
@@ -55,10 +69,10 @@ export default function AllBooks() {
         <div className="container">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold md:text-3xl md:leading-tight dark:text-white">
-              Our Letest Book
+              All Books
             </h2>
             <p className="mt-3 text-gray-500 dark:text-gray-400">
-              Get all the latest Book here.
+              Get all the Book here.
             </p>
           </div>
           {isLoading && (

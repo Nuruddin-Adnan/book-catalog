@@ -27,8 +27,6 @@ export default function MyReadingList() {
 
   const myReadingLists = data.data;
 
-  console.log(myReadingLists);
-
   // update the status of my reading list
   const updateMyReadinglistHandler = async (id: string, status: string) => {
     const data = { status: status };
