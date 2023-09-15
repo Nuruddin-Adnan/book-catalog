@@ -3,19 +3,47 @@ import { useGetBooksQuery } from "../../redux/features/books/bookApi";
 import { IBook } from "../../types/book";
 import Subscribe from "../../components/Subscribe";
 import { useState } from "react";
+import { errorToast } from "../../hooks/useToast";
+import { padNumberToFourDigits } from "../../lib/utils";
 
 export default function AllBooks() {
-  const [filter, setFilter] = useState("");
-  const [searchInput, setSearchInput] = useState("");
+  const [filter, setFilter] = useState("title");
   const [query, setQuery] = useState("");
 
-  const { data, isLoading, error } = useGetBooksQuery(query, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading, error } = useGetBooksQuery(
+    `${query}&sort=-createdAt`,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   // filtering start
-  const filterQuery = () => {
-    console.log(filter, searchInput);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const filterQuery = (e: any) => {
+    // set the input value
+    const searchInput = e.target.value.trim();
+
+    if (searchInput.length > 0) {
+      if (filter !== "publicationYear") {
+        const query = `search=${searchInput}&searchFields=${filter}`;
+        setQuery(query);
+      } else {
+        const numericSearchInput = parseInt(searchInput);
+
+        if (!isNaN(numericSearchInput)) {
+          // pad the number to four digits if less than 4
+          const year = padNumberToFourDigits(numericSearchInput);
+          const query = `publicationDate[gte]=${year}&publicationDate[lt]=${padNumberToFourDigits(
+            parseInt(year) + 1
+          )}`;
+          setQuery(query);
+        } else {
+          errorToast("Please input a valid year");
+        }
+      }
+    } else {
+      setQuery("");
+    }
   };
   // end of filtering
 
@@ -32,7 +60,7 @@ export default function AllBooks() {
             id="hs-trailing-button-add-on-multiple-add-ons"
             name="hs-trailing-button-add-on-multiple-add-ons"
             className="py-4 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm  focus:border-blue-500 focus:z-10 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(e) => filterQuery(e)}
           />
           <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
             <svg
@@ -48,7 +76,7 @@ export default function AllBooks() {
           </div>
           <div className="min-w-fit border">
             <select
-              className="block w-full h-full px-4 border-transparent rounded-md focus:ring-blue-600 focus:border-blue-600 dark:bg-gray-800 border font-medium bg-white text-gray-700 shadow-sm text-sm "
+              className="block w-full h-full py-4 px-4 rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
               onChange={(e) => setFilter(e.target.value)}
             >
               <option value="title">Title</option>
@@ -56,13 +84,13 @@ export default function AllBooks() {
               <option value="publicationYear">Publication year</option>
             </select>
           </div>
-          <button
+          {/* <button
             type="button"
             className="py-4 px-4 inline-flex flex-shrink-0 justify-center items-center gap-2 rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm"
             onClick={filterQuery}
           >
             Search
-          </button>
+          </button> */}
         </div>
       </div>
       <section className="pb-32 pt-5">
@@ -93,10 +121,15 @@ export default function AllBooks() {
           {!isLoading && (
             <>
               <div className="grid gap-8 xl:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 lg:px-10 px-4">
-                {data.data &&
+                {data.data.length > 0 ? (
                   data.data.map((book: IBook) => (
                     <BookCard book={book} key={book._id} />
-                  ))}
+                  ))
+                ) : (
+                  <h2 className="text-center col-span-full text-red-500 font-semibold text-xl">
+                    No Data found
+                  </h2>
+                )}
               </div>
             </>
           )}
